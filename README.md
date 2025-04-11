@@ -44,3 +44,33 @@ pip install -r requirements.txt
 
 # Run the Flask app
 python app.py
+```
+---
+🚀 Visit http://127.0.0.1:5000 to access the tool in your browser.
+
+👨‍💻 Our Team
+Name	Role
+Shreyash Ghare	Frontend, Backend, Testing
+Aman Gupta	Testing, Research Paper
+Bhushan Shetty	Backend Development
+Gaurav Kumar	OSINT Algorithms, LLM Integration
+Atharva Kumbhar	Research, Quality Assurance
+
+
+📸 Screenshots
+(Coming soon: screenshots, video demo, or UI walkthrough GIFs!)
+
+📜 License
+Distributed under the MIT License. See LICENSE for more info.
+
+🤝 Contributing
+Found a bug or want to suggest a new feature?
+We welcome issues and pull requests!
+
+⭐ Show some love
+If you found this useful, consider giving it a ⭐ on GitHub and sharing it with your fellow hackers!
+
+📬 Contact
+📧 Email: [shreyashghare07@gmail.com]
+🔗 LinkedIn: [[shreyashghare07](https://www.linkedin.com/in/shreyashghare07/)]
+🌐 GitHub: github.com/Shreyashg07
