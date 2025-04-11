@@ -57,12 +57,6 @@ Gaurav Kumar	OSINT Algorithms, LLM Integration
 Atharva Kumbhar	Research, Quality Assurance
 
 
-📸 Screenshots
-(Coming soon: screenshots, video demo, or UI walkthrough GIFs!)
-
-📜 License
-Distributed under the MIT License. See LICENSE for more info.
-
 🤝 Contributing
 Found a bug or want to suggest a new feature?
 We welcome issues and pull requests!
