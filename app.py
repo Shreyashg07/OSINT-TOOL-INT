@@ -1,37 +1,28 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+import whois
+import dns.resolver
+import socket
+import random
 import requests
-import json
-import re
-import os
-from exif import Image  # For extracting image metadata
+from exif import Image
 import phonenumbers
 from phonenumbers import geocoder, carrier
-import dns.resolver  # Free DNS Lookup Library
-from bs4 import BeautifulSoup  # For scraping bios
-import socket  # For IP and domain lookup
-import random  # For Google Dork Generator
-
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
-
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
-
-
 
 @app.route('/')
 def home():
     return "OSINT API is running!", 200
 
-import whois
 
+# 🔹 Domain Info
 @app.route('/domain-info')
 def domain_info():
     domain = request.args.get('domain')
     if not domain:
         return jsonify({"error": "No domain provided"}), 400
-
     try:
         domain_data = whois.whois(domain)
         return jsonify({
@@ -46,7 +37,7 @@ def domain_info():
         return jsonify({"error": str(e)}), 500
 
 
-# 🔹 DNS Lookup (Free)
+# 🔹 DNS Lookup
 @app.route('/dns-lookup')
 def dns_lookup():
     domain = request.args.get('domain')
@@ -55,7 +46,6 @@ def dns_lookup():
 
     dns_records = ["A", "MX", "NS", "TXT", "CNAME"]
     results = {}
-
     try:
         for record in dns_records:
             try:
@@ -69,19 +59,19 @@ def dns_lookup():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-import socket
 
+# 🔹 IP/Domain Info
 @app.route('/ip-domain-info')
 def ip_domain_info():
     query = request.args.get('query')
     if not query:
         return jsonify({"error": "No IP or domain provided"}), 400
-
     try:
         ip = socket.gethostbyname(query)
         return jsonify({"query": query, "ip": ip})
     except socket.gaierror:
         return jsonify({"error": "Invalid domain or IP"}), 400
+
 
 # 🔹 Google Dork Generator
 @app.route('/google-dork')
@@ -96,12 +86,12 @@ def google_dork():
     selected_dork = random.choice(dorks).format(domain=domain)
     return jsonify({"google_dork": selected_dork})
 
+
 # 🔹 Metadata Extractor
 @app.route('/metadata', methods=['POST'])
 def metadata_extractor():
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
-    
     file = request.files['file']
     try:
         img = Image(file)
@@ -110,9 +100,10 @@ def metadata_extractor():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-# 🔹 SOCIAL MEDIA OSINT (Only Valid Profiles)
+
+# 🔹 Social Media OSINT
 def check_profile(url):
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"}
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     try:
         response = requests.get(url, headers=headers, timeout=5)
         return response.status_code == 200
@@ -124,7 +115,6 @@ def social_media_osint():
     username = request.args.get('username')
     if not username:
         return jsonify({"error": "No username provided"}), 400
-
     platforms = {
         "LinkedIn": f"https://www.linkedin.com/in/{username}",
         "Instagram": f"https://www.instagram.com/{username}",
@@ -134,24 +124,22 @@ def social_media_osint():
         "Twitter": f"https://twitter.com/{username}",
         "Threads": f"https://www.threads.net/@{username}"
     }
-
     valid_profiles = {platform: url for platform, url in platforms.items() if check_profile(url)}
     return jsonify({"username": username, "valid_platforms": valid_profiles})
 
-# 🔹 PHONE OSINT (Carrier, City, Country Info)
+
+# 🔹 Phone OSINT
 @app.route('/phone-osint')
 def phone_osint():
     phone = request.args.get('number')
     if not phone:
         return jsonify({"error": "No phone number provided"}), 400
-
     try:
         parsed_number = phonenumbers.parse(phone, "IN")
         valid = phonenumbers.is_valid_number(parsed_number)
         country = geocoder.country_name_for_number(parsed_number, "en")
         city = geocoder.description_for_number(parsed_number, "en") or "Unknown"
         carrier_name = carrier.name_for_number(parsed_number, "en") or "Unknown"
-
         return jsonify({
             "number": phone,
             "valid": valid,
@@ -160,7 +148,8 @@ def phone_osint():
             "carrier": carrier_name
         })
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
+
 
 # 🔹 VoIP OSINT
 @app.route('/voip-osint')
@@ -168,11 +157,9 @@ def voip_osint():
     phone = request.args.get('number')
     if not phone:
         return jsonify({"error": "No phone number provided"}), 400
-
     try:
         parsed_number = phonenumbers.parse(phone, "IN")
         is_voip = carrier.name_for_number(parsed_number, "en") in ["Google Voice", "Skype", "TextNow", "Vonage", "Twilio"]
-        
         return jsonify({
             "number": phone,
             "voip": is_voip
@@ -180,32 +167,24 @@ def voip_osint():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-import requests
 
+# 🔹 Web OSINT
 @app.route('/web-osint')
 def web_osint():
     url = request.args.get('url')
     if not url:
         return jsonify({"error": "No URL provided"}), 400
-
     if not url.startswith("http"):
-        url = "http://" + url  # Ensure proper formatting
-
+        url = "http://" + url
     try:
         response = requests.get(url, timeout=5)
         headers = response.headers
         security_headers = {h: headers[h] for h in headers if h.lower() in ["x-frame-options", "strict-transport-security", "content-security-policy"]}
-
-        # Indexed pages check using Google Search
         google_search_url = f"https://www.google.com/search?q=site:{url.replace('http://', '').replace('https://', '')}"
-        
-        # Check for robots.txt & sitemap.xml
         robots_url = url + "/robots.txt"
         sitemap_url = url + "/sitemap.xml"
-        
         robots_exists = requests.get(robots_url).status_code == 200
         sitemap_exists = requests.get(sitemap_url).status_code == 200
-
         return jsonify({
             "url": url,
             "status_code": response.status_code,
@@ -215,12 +194,10 @@ def web_osint():
             "robots_txt": robots_exists,
             "sitemap_xml": sitemap_exists
         })
-
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
 
-# 🔹 Run Flask Server
+# 🔹 Run the Flask server
 if __name__ == '__main__':
     app.run(debug=True)
-

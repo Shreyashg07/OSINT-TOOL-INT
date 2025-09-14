@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Ensure elements exist before adding event listeners
+    // Attach event listeners after DOM is fully loaded
     document.getElementById("domainLookupBtn")?.addEventListener("click", fetchDomainInfo);
     document.getElementById("dnsLookupBtn")?.addEventListener("click", fetchDNSInfo);
     document.getElementById("metadataExtractBtn")?.addEventListener("click", fetchMetadata);
@@ -12,12 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function fetchData(url, resultElementId) {
-    fetch(url)
+    fetch(`http://127.0.0.1:5000${url}`)  // Explicit API endpoint
         .then(response => response.json())
         .then(data => {
             document.getElementById(resultElementId).textContent = JSON.stringify(data, null, 2);
         })
-        .catch(error => console.error("Error fetching data:", error));
+        .catch(error => {
+            document.getElementById(resultElementId).textContent = "Error: " + error;
+            console.error("Error fetching data:", error);
+        });
 }
 
 function fetchDomainInfo() {
@@ -31,8 +34,6 @@ function fetchDNSInfo() {
     if (!domain) return alert("Please enter a domain");
     fetchData(`/dns-lookup?domain=${domain}`, "dnsResult");
 }
-
-
 
 function fetchIPDomainInfo() {
     const query = document.getElementById("ipDomainInput").value;
@@ -69,14 +70,7 @@ function fetchWebOSINT() {
     if (!url) return alert("Please enter a website URL");
     fetchData(`/web-osint?url=${encodeURIComponent(url)}`, "webResult");
 }
-function fetchData(url, resultElementId) {
-    fetch(`http://127.0.0.1:5000${url}`)  // Explicitly call API
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById(resultElementId).textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(error => console.error("Error fetching data:", error));
-}
+
 function fetchMetadata() {
     const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
@@ -86,10 +80,19 @@ function fetchMetadata() {
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const content = event.target.result;
-        document.getElementById("output").textContent = content; // Display metadata
-    };
-    reader.readAsText(file); // Read as text or use other methods (readAsArrayBuffer, readAsDataURL)
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("http://127.0.0.1:5000/metadata", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        document.getElementById("output").textContent = "Error: " + error;
+        console.error("Error uploading file:", error);
+    });
 }

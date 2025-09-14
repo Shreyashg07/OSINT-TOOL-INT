@@ -1,85 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cyber Hive Project</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <script src="script.js"></script>
-    <div class="container">
-        <h1>OSINT Dashboard</h1>
+    <div class="header">
+        <h1><span class="green">Welcome to</span> <span class="red">Cyber Hive Project</span></h1>
+        <p class="tagline">Enhancing Cyber Investigations:<br>The Power of an Integrated OSINT Platform</p>
+        <div class="nav-buttons">
+            <button onclick="document.getElementById('tools').scrollIntoView();">Tools</button>
+            <button onclick="document.getElementById('about').scrollIntoView();">About</button>
+            <button onclick="document.getElementById('research').scrollIntoView();">Research Papers</button>
+        </div>
+    </div>
 
-        <div class="section">
-            <h2>Domain Info</h2>
-            <input type="text" id="domainInput" placeholder="Enter domain">
-            <button onclick="fetchDomainInfo()">Search</button>
+    <div class="section" id="tools">
+        <h2><span class="green">OSINT Tools</span></h2>
+
+        <!-- Domain Info -->
+        <div class="tool">
+            <h3>Domain Info</h3>
+            <input type="text" id="domainInput" placeholder="Enter domain" />
+            <button id="domainLookupBtn">Search</button>
             <pre id="domainResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>DNS Lookup</h2>
-            <input type="text" id="dnsInput" placeholder="Enter domain">
-            <button onclick="fetchDNSInfo()">Search</button>
+        <!-- DNS Lookup -->
+        <div class="tool">
+            <h3>DNS Lookup</h3>
+            <input type="text" id="dnsInput" placeholder="Enter domain" />
+            <button id="dnsLookupBtn">Search</button>
             <pre id="dnsResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>IP/Domain Info</h2>
-            <input type="text" id="ipDomainInput" placeholder="Enter IP or Domain">
-            <button onclick="fetchIPDomainInfo()">Search</button>
+        <!-- IP/Domain Info -->
+        <div class="tool">
+            <h3>IP/Domain Info</h3>
+            <input type="text" id="ipDomainInput" placeholder="Enter IP or Domain" />
+            <button id="ipDomainLookupBtn">Search</button>
             <pre id="ipDomainResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>Google Dork Generator</h2>
-            <input type="text" id="dorkInput" placeholder="Enter domain">
-            <button onclick="fetchGoogleDork()">Generate</button>
+        <!-- Google Dork Generator -->
+        <div class="tool">
+            <h3>Google Dork Generator</h3>
+            <input type="text" id="dorkInput" placeholder="Enter domain" />
+            <button id="googleDorkBtn">Generate</button>
             <pre id="dorkResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>Metadata Extractor</h2>
-            <input type="file" id="fileInput">
-            <button onclick="fetchMetadata()">Extract Metadata</button>
+        <!-- Metadata Extractor -->
+        <div class="tool">
+            <h3>Metadata Extractor</h3>
+            <input type="file" id="fileInput" />
+            <button id="metadataExtractBtn">Extract Metadata</button>
             <pre id="output"></pre>
-
         </div>
 
-        <div class="section">
-            <h2>Social Media OSINT</h2>
-            <input type="text" id="socialMediaInput" placeholder="Enter username">
-            <button onclick="fetchSocialMedia()">Search</button>
+        <!-- Social Media OSINT -->
+        <div class="tool">
+            <h3>Social Media OSINT</h3>
+            <input type="text" id="socialMediaInput" placeholder="Enter username" />
+            <button id="socialMediaLookupBtn">Search</button>
             <pre id="socialMediaResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>Phone OSINT</h2>
-            <input type="text" id="phoneInput" placeholder="Enter phone number">
-            <button onclick="fetchPhoneOSINT()">Search</button>
+        <!-- Phone OSINT -->
+        <div class="tool">
+            <h3>Phone OSINT</h3>
+            <input type="text" id="phoneInput" placeholder="Enter phone number" />
+            <button id="phoneLookupBtn">Search</button>
             <pre id="phoneResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>VoIP OSINT</h2>
-            <input type="text" id="voipInput" placeholder="Enter phone number">
-            <button onclick="fetchVoipOSINT()">Search</button>
+        <!-- VoIP OSINT -->
+        <div class="tool">
+            <h3>VoIP OSINT</h3>
+            <input type="text" id="voipInput" placeholder="Enter phone number" />
+            <button id="voipLookupBtn">Search</button>
             <pre id="voipResult"></pre>
         </div>
 
-        <div class="section">
-            <h2>Web OSINT</h2>
-            <input type="text" id="webInput" placeholder="Enter website URL">
-            <button onclick="fetchWebOSINT()">Search</button>
+        <!-- Web OSINT -->
+        <div class="tool">
+            <h3>Web OSINT</h3>
+            <input type="text" id="webInput" placeholder="Enter website URL" />
+            <button id="webLookupBtn">Search</button>
             <pre id="webResult"></pre>
         </div>
     </div>
 
+    <div class="section" id="about">
+        <h2><span class="green">About Team - Cyber Hive</span></h2>
+        <pre>
+👨‍💻 Shreyash Ghare (MYSELF) – Frontend, Backend, Testing, Library Integration
+🔍 Aman Gupta – Testing, Research Paper
+🛠️ Bhushan Shetty – Backend
+🧠 Gaurav Kumar (LEADER) – OSINT Algorithms, Library Integration
+📖 Atharva Kumbhar – Research Paper, Testing
+        </pre>
+    </div>
 
+    <div class="section" id="research">
+        <h2><span class="green">Research Papers</span></h2>
+        <p>Explore detailed insights and analysis supporting our OSINT methodologies.</p>
+    </div>
 
+    <script src="script.js"></script>
 </body>
-
 </html>
