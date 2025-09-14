@@ -74,13 +74,13 @@ If you found this useful, consider giving it a ⭐ on GitHub and sharing it with
 
 Here are some screenshots showcasing the OSINT tool’s output:
 
-![Output 1](image/flex1.png)
+![Output 1](https://raw.githubusercontent.com/Shreyashg07/OSINT-TOOL-INT/main/images/flex1.png)
 *Domain info and DNS lookup output.*
 
-![Output 2](image/flex2.png)
+![Output 2](https://raw.githubusercontent.com/Shreyashg07/OSINT-TOOL-INT/main/images/flex2.png)
 *Google dork generation and metadata extraction.*
 
-![Output 3](image/flex3.png)
+![Output 3](https://raw.githubusercontent.com/Shreyashg07/OSINT-TOOL-INT/main/images/flex3.png)
 *Phone OSINT and web headers analysis.*
 
 ---
