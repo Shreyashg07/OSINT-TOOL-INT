@@ -12,9 +12,11 @@ from phonenumbers import geocoder, carrier
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-@app.route('/')
-def home():
-    return "OSINT API is running!", 200
+# 🔹 HTML UI
+@app.route("/ui")
+def ui():
+    return render_template("index.html")
+
 
 
 # 🔹 Domain Info
