@@ -1,0 +1,15 @@
+Flask
+flask-cors
+python-whois
+dnspython
+requests
+exif
+phonenumbers
+Flask
+flask-cors
+python-whois
+dnspython
+requests
+exif
+phonenumbers
+gunicorn
