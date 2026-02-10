@@ -13,8 +13,8 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # 🔹 HTML UI
-@app.route("/ui")
-def ui():
+@app.route('/')
+def home():
     return render_template("index.html")
 
 
